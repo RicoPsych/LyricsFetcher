@@ -1,0 +1,9 @@
+Better YT name parsing 
+    (feat, 
+    artist name as song names(artists name comes first?),
+     more OFFICIAL VIDEO type stuff)
+    artists "The" in yt song name 
+    names concateted
+
+More Lyric catalogs?
+Album texts?(YT Playlists)

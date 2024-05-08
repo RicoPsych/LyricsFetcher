@@ -34,19 +34,26 @@ def parse_tekstowo(value:str):
     value = re.sub(r'\W+','_', value)
     return value
 
-def removeCommonStrings(value:str):
-    tokens = [" (Official Audio)"," (Official Video)"," (Official Music Video)", " (Official Visualizer)", "  (Official HD Video)", "[LYRICS]"]    
-    for token in tokens:
-        token_replace = re.compile(re.escape(token),re.IGNORECASE)
-        value = token_replace.sub('',value)
-#        value = value.replace(token,"")
-    return value
+def removeCommonStrings(title:str):
+    parenthesis = ["[]","{}","()","<>"]
+    tokens = ["Official Audio","Official Video","Official Music Video", 
+              "Official Visualizer", "Official HD Video", "LYRICS", "LIVE" ,
+              "VOD", "Oficjalny Teledysk" ]    
+    for type in parenthesis:
+        for token in tokens:
+            token_replace = re.compile(re.escape(type[0]+token+type[1]),re.IGNORECASE)
+            title = token_replace.sub('',title)
+        title = re.sub(rf'\{type[0]}[0-9]+\{type[1]}','',title)
+
+    return title
 
 def parseTitle(title:str,artist:str):
-    return removeCommonStrings(title.replace(artist,"").strip().removeprefix("-")).strip()
+    token_replace = re.compile(re.escape(artist),re.IGNORECASE)
+    title = token_replace.sub('',title,1)
+    return removeCommonStrings(title.strip().removeprefix("-").removeprefix("–")).strip() # 1 artist occurence?
 
 def parseArtist(artist:str):
-    return artist.replace(" - Topic","").replace("VEVO","").removeprefix("The").removeprefix("the").removesuffix("Official").rstrip().strip()
+    return artist.replace(" - Topic","").replace("VEVO","").removeprefix("The").removeprefix("the").removesuffix("Official").removesuffix("TV").rstrip().strip()
 
 
 
